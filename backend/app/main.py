@@ -1,9 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+# from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-
 from .database import SessionLocal, engine , Base
-from . import models
 from .schemas import EmployeeCreate, EmployeeResponse
 from .crud import (
     create_employee,
@@ -13,19 +11,28 @@ from .crud import (
     delete_employee
 )
 
-Base.metadata.create_all(bind=engine)
-
-
 app = FastAPI(title="Team Resource API")
+#fast api
+
+
+#creating table
+@app.on_event("startup")
+def startup():
+    Base.metadata.create_all(bind=engine) # Creates all tables in models.py using engine where Base i parent class
+
+@app.get("/")
+def root():
+    return {"message": "Team Resource API is running 🚀"}
+
 
 # CORS (important for frontend)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 def get_db():
     db = SessionLocal()
@@ -33,6 +40,8 @@ def get_db():
         yield db
     finally:
         db.close()
+
+"""Declare a FastAPI dependency.It takes a single "dependable" callable (like a function).Don't call it directly, FastAPI will call it for you."""
 
 @app.post("/employees", response_model=EmployeeResponse)
 def add_employee(emp: EmployeeCreate, db: Session = Depends(get_db)):
