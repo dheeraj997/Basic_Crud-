@@ -157,12 +157,6 @@ employee-db.c9akciqxyz.ap-south-1.rds.amazonaws.com
 
 ---
 
-### ✅ What you can do next
-
-- Push this to GitHub
-- Add screenshots of Swagger UI
-- Use this project in interviews confidently
-
 If you want, I can:
 
 - Write **resume bullet points**
