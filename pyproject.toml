@@ -11,3 +11,5 @@ dependencies = [
     "sqlalchemy>=2.0.45",
     "uvicorn>=0.38.0",
 ]
+[project.scripts]
+app = "backend.app.main:app"
