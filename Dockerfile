@@ -30,7 +30,7 @@ COPY . .
 USER appuser
 
 # IMPORTANT: run from backend root
-WORKDIR /app/backend
+WORKDIR /app
 
 # Expose FastAPI port
 EXPOSE 8080
