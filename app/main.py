@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.responses import RedirectResponse
-# from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from .database import SessionLocal, engine , Base
 from .schemas import EmployeeCreate, EmployeeResponse
@@ -12,8 +12,7 @@ from .crud import (
     delete_employee
 )
 
-app = FastAPI(title="Team Resource API")
-#fast api
+app = FastAPI(title="TeamPulse API")
 
 
 #creating table
@@ -21,14 +20,14 @@ app = FastAPI(title="Team Resource API")
 def startup():
     Base.metadata.create_all(bind=engine) # Creates all tables in models.py using engine where Base i parent class
 
-# CORS (important for frontend)
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+# CORS (important for React frontend on port 3000)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def get_db():
     db = SessionLocal()
@@ -37,7 +36,6 @@ def get_db():
     finally:
         db.close()
 
-"""Declare a FastAPI dependency.It takes a single "dependable" callable (like a function).Don't call it directly, FastAPI will call it for you."""
 @app.get("/", include_in_schema=False)
 def root():
     return RedirectResponse(url="/docs")

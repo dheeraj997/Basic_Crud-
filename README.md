@@ -1,120 +1,77 @@
-# 📘 Team Resource API (FastAPI + MySQL + AWS RDS)
+# ⚡ TeamPulse — Employee Dashboard (FastAPI + React + MySQL)
 
-A production-style **CRUD REST API** built using **FastAPI**, **SQLAlchemy ORM**, and **MySQL (AWS RDS)** to manage employee/team resources.
+A modern, production-style **Full-Stack Application** to easily manage employee and team resources. 
+
+Built with a lightning-fast python **FastAPI** backend and a stunning **Vite + React** frontend.
 
 🔗 **Live API:**
-https://simple-crud-one-roan.vercel.app/
+[https://simple-crud-one-roan.vercel.app/](https://simple-crud-one-roan.vercel.app/)
 
 📖 **Swagger Documentation:**
-https://simple-crud-one-roan.vercel.app/docs
+[https://simple-crud-one-roan.vercel.app/docs](https://simple-crud-one-roan.vercel.app/docs)
 
 ---
 
-# 🚀 Features
+## 🚀 Features
 
-- Create, Read, Update, Delete (CRUD) employees
-- Clean **layered architecture**
-- SQLAlchemy ORM (no raw SQL)
-- Pydantic request validation
-- MySQL database hosted on **AWS RDS**
-- **Serverless deployment using Vercel**
-- Interactive API testing with **Swagger UI**
-- Ready for frontend integration (CORS supported)
+- **Full-Stack Architecture**: Clean separation between a React SPA (frontend) and REST APIs (backend).
+- **Modern UI**: A premium dark-mode dashboard with interactive stat counters, glassmorphism elements, micro-animations, and responsive cards (`frontend` folder).
+- **CRUD Operations**: Create, Read, Update, Delete team members with real-time feedback and toast notifications.
+- **SQLAlchemy ORM**: No raw SQL; strict request validation via Pydantic.
+- **MySQL on AWS RDS**: Persistent, free-tier relational database hosting.
+- **Vercel Serverless**: Backend runs serverlessly via Vercel Functions.
 
 ---
 
-# 🧱 Tech Stack
+## 🧱 Tech Stack
 
 | Layer             | Technology          |
 | ----------------- | ------------------- |
-| Backend Framework | FastAPI             |
-| ORM               | SQLAlchemy          |
-| Validation        | Pydantic            |
-| Database          | MySQL               |
-| Cloud Database    | AWS RDS             |
-| Deployment        | Vercel (Serverless) |
-| Driver            | PyMySQL             |
+| **Frontend**      | React, Vite, CSS    |
+| **Backend API**   | FastAPI             |
+| **ORM**           | SQLAlchemy          |
+| **Validation**    | Pydantic            |
+| **Database**      | MySQL               |
+| **Cloud Hosting** | Vercel (API), AWS RDS (DB) |
 
 ---
 
-# ☁️ Deployment (Vercel)
+## 📂 Project Structure
 
-This API is deployed using **Vercel Serverless Functions**, which allows the FastAPI backend to run without managing infrastructure.
-
-When code is pushed to GitHub, **Vercel automatically builds and deploys the API**.
-
-### Deployment Workflow
-
-1. Developer pushes code to GitHub
-2. Vercel automatically triggers a build
-3. Dependencies are installed
-4. FastAPI app is deployed as a **serverless function**
-5. API becomes publicly accessible
-
-### Serverless Entrypoint
-
-Vercel detects backend functions inside the `api` folder.
-
-Project deployment entrypoint:
-
-```
-api/
-└── index.py
-```
-
-`api/index.py`
-
-```python
-from app.main import app
-```
-
-This exposes the FastAPI application to Vercel’s runtime.
-
-### Environment Variables
-
-Database credentials are stored securely in **Vercel Environment Variables**.
-
-Example variables configured:
-
-```
-DB_HOST
-DB_PORT
-DB_USER
-DB_PASSWORD
-DB_NAME
-```
-
-This ensures sensitive data is **not stored inside the repository**.
-
----
-
-# 📂 Project Structure
-
-```
-app/
+```text
+simple_crud/
 │
-├── main.py        # FastAPI application & routes
-├── database.py    # Database connection & session
-├── models.py      # SQLAlchemy ORM models
-├── schemas.py     # Pydantic schemas
-├── crud.py        # Database CRUD operations
-├── __init__.py
+├── app/                  # FastAPI Backend Application
+│   ├── main.py           # Application routes & CORS configuration
+│   ├── database.py       # SQLAlchemy MySQL connection
+│   ├── models.py         # DB schemas/models
+│   ├── schemas.py        # Pydantic validation schemas
+│   ├── crud.py           # Database operations
 │
-api/
-└── index.py       # Vercel serverless entrypoint
-
-.env
-requirements.txt
-README.md
+├── frontend/             # React SPA (Vite)
+│   ├── src/
+│   │   ├── components/   # UI components (Cards, Modals, Navbar)
+│   │   ├── App.jsx       # Main Dashboard orchestrator 
+│   │   ├── api.js        # Axios/Fetch wrapper for REST API calls
+│   │   ├── index.css     # Complete design system & tokens
+│   ├── vite.config.js    # Vite config (proxies /employees to FastAPI)
+│
+├── api/                  
+│   └── index.py          # Vercel Serverless Entrypoint for the backend
+│
+├── .env                  # Environment Variables (Not checked into Git)
+└── requirements.txt      # Python dependencies
 ```
 
 ---
 
-# 🔐 Environment Variables
+## ▶️ Getting Started Locally (For Developers)
 
-Create a `.env` file in the root directory.
+To run this application locally, you need two terminals: one for the **FastAPI backend** and one for the **React frontend**. 
 
-```
+### 1. Setup Environment Variables
+Create a `.env` file in the root directory and configure your AWS RDS MySQL credentials:
+```env
 DB_USER=admin
 DB_PASSWORD=yourpassword
 DB_HOST=your-rds-endpoint.amazonaws.com
@@ -122,184 +79,51 @@ DB_PORT=3306
 DB_NAME=employee_db
 ```
 
----
+### 2. Start the FastAPI Backend
+Open a terminal in the root `simple_crud` folder.
 
-# ▶️ Running the Application Locally
-
-Install dependencies:
-
-```
+```bash
+# Install Python dependencies
 pip install -r requirements.txt
-```
 
-Run the FastAPI server:
+# Start the local uvicorn server
+uvicorn app.main:app --reload --port 8000
+```
+> The API will run on `http://127.0.0.1:8000/`. Going to this URL redirects to the swagger docs (`/docs`).
 
-```
-uvicorn app.main:app --reload
-```
+### 3. Start the React Frontend
+Open **another terminal** and navigate to the `frontend` folder.
 
-Open Swagger documentation:
+```bash
+cd frontend
 
+# Install Node dependencies
+npm install
+
+# Start the Vite development server
+npm run dev
 ```
-http://127.0.0.1:8000/docs
-```
+> The UI will run on `http://localhost:3000/` and automatically proxies API requests to your local Python backend.
 
 ---
 
-# 🧠 Architecture Flow
+## ☁️ Deployment (Vercel)
 
-```
-Client / Frontend
-        ↓
-FastAPI Routes
-        ↓
-Pydantic Schemas (Validation)
-        ↓
-CRUD Layer
-        ↓
-SQLAlchemy ORM
-        ↓
-AWS RDS MySQL Database
-```
+This application is built to leverage **Vercel Serverless Functions**. The `api/index.py` file exposes the FastAPI application to Vercel's runtime environment.
+
+- Add your database environment variables securely in your Vercel Project Settings.
+- Connect your GitHub repository, and any push will automatically trigger a build, deploying your API.
+- Your frontend React codebase should be configured as a Vercel project, and you can map API rewrites in `vercel.json` to seamlessly integrate them.
 
 ---
 
-# 🗄️ AWS RDS MySQL Setup (Step-by-Step Guide)
+## 👨‍💻 Author
 
-This guide explains how to set up a **MySQL database on AWS RDS (Free Tier)** and connect it to the backend application.
-
----
-
-## 1️⃣ Login to AWS Console
-
-Go to **AWS Console → RDS → Create Database**
+**Dheeraj**  
+*Backend / Data Engineer*
 
 ---
 
-## 2️⃣ Database Configuration
-
-- Creation Method → **Standard Create**
-- Engine Type → **MySQL**
-- Engine Version → Default (MySQL 8.x)
-
----
-
-## 3️⃣ Template
-
-Select **Free Tier**
-
----
-
-## 4️⃣ Settings
-
-```
-DB instance identifier: employee-db
-Master username: admin
-```
-
-Choose a secure password.
-
----
-
-## 5️⃣ Instance Configuration
-
-```
-DB Instance Class: db.t3.micro
-```
-
----
-
-## 6️⃣ Storage
-
-```
-Allocated Storage: 20 GB
-```
-
-This is enough for learning and demo projects.
-
----
-
-## 7️⃣ Connectivity (Important)
-
-Enable public access and update the security group:
-
-```
-Type: MySQL / Aurora
-Port: 3306
-Source: 0.0.0.0/0
-```
-
-⚠️ For learning purposes only. Restrict access in production.
-
----
-
-## 8️⃣ Create Database
-
-Click **Create Database** and wait until status becomes:
-
-```
-Available
-```
-
----
-
-## 9️⃣ Get RDS Endpoint
-
-Open the database → **Connectivity & Security** → copy the endpoint.
-
-Example:
-
-```
-employee-db.c9akciqxyz.ap-south-1.rds.amazonaws.com
-```
-
-Use this value as `DB_HOST`.
-
----
-
-# 📌 Example API Request
-
-### Create Employee
-
-```
-POST /employees
-```
-
-Request body:
-
-```json
-{
-  "name": "Rahul",
-  "email": "rahul@gmail.com",
-  "role": "Developer",
-  "skills": "Python, SQL, AWS",
-  "availability": "Full-time"
-}
-```
-
----
-
-# 📊 Possible Future Improvements
-
-- Pagination and filtering
-- JWT authentication
-- API versioning
-- Docker containerization
-- Alembic database migrations
-- CI/CD pipeline with GitHub Actions
-- Role-based access control
-
----
-
-# 👨‍💻 Author
-
-Dheeraj
-Backend / Data Engineer
-
----
-
-# ⭐ Support
+## ⭐ Support
 
 If you found this project useful, consider giving the repository a **star ⭐ on GitHub**.
-
-![alt text](image.png)
